@@ -5,4 +5,15 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="cs-expert-system-shell" Version="1.0.1" />
+    <PackageReference Include="CsvHelper" Version="7.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Intakes.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
