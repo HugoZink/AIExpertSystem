@@ -12,6 +12,7 @@ namespace ArtificialIntelligenceOpdracht1
         {
             Console.WriteLine("Hello World!");
 			ReadStudentRecords();
+			Console.ReadLine();
         }
 
 		private static void ReadStudentRecords()
@@ -40,28 +41,13 @@ namespace ArtificialIntelligenceOpdracht1
 				List<Clause> unproved_conditions = new List<Clause>();
 				var conclusion = rie.Infer("advies", unproved_conditions);
 
-				if(conclusion != null)
+				if (conclusion != null)
 				{
-					Console.WriteLine("Generated advice");
+					Console.WriteLine($"{record.studentnummer}: {conclusion.Value}");
 				}
-
-				//Clause conclusion = null;
-				while (conclusion == null)
+				else
 				{
-					conclusion = rie.Infer("advies", unproved_conditions);
-					if (conclusion == null)
-					{
-						if (unproved_conditions.Count == 0)
-						{
-							break;
-						}
-						Clause c = unproved_conditions[0];
-						Console.WriteLine("ask: " + c + "?");
-						unproved_conditions.Clear();
-						Console.WriteLine("What is " + c.Variable + "?");
-						String value = Console.ReadLine();
-						rie.AddFact(new IsClause(c.Variable, value));
-					}
+					Console.WriteLine($"Could not generate advice for student {record.studentnummer}");
 				}
 			}
 		}
@@ -77,9 +63,8 @@ namespace ArtificialIntelligenceOpdracht1
 			positiveRule.AddAntecedent(new GEClause("capaciteiten", "6"));
 			positiveRule.AddAntecedent(new GEClause("intr. Motivatie", "7"));
 			positiveRule.AddAntecedent(new GEClause("extr. Motivatie", "7"));
-			positiveRule.AddAntecedent(new IsClause("is_mbo_deficient", "nee"));
+			positiveRule.AddAntecedent(new IsClause("is_mbo_deficient", "Nee"));
 			positiveRule.AddAntecedent(new IsClause("Persoonlijk 'bijspijker'-advies", "0"));
-			positiveRule.AddAntecedent(new IsClause("Aanmelden voor verkort opleidingstraject", "1"));
 			positiveRule.AddAntecedent(new IsClause("reden_stoppen", ""));
 			positiveRule.setConsequent(new IsClause("advies", "Positief"));
 			rie.AddRule(positiveRule);
@@ -92,7 +77,6 @@ namespace ArtificialIntelligenceOpdracht1
 			doubtRule.AddAntecedent(new IsClause("intr. Motivatie", "5"));
 			doubtRule.AddAntecedent(new IsClause("extr. Motivatie", "5"));
 			doubtRule.AddAntecedent(new IsClause("Persoonlijk 'bijspijker'-advies", "1"));
-			doubtRule.AddAntecedent(new IsClause("Aanmelden voor verkort opleidingstraject", "0"));
 			doubtRule.AddAntecedent(new IsClause("reden_stoppen", "Uitgeschreven voor opleiding."));
 			doubtRule.setConsequent(new IsClause("advies", "Twijfel"));
 			rie.AddRule(doubtRule);
